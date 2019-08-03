@@ -7,14 +7,11 @@ import "./custom.css";
 
 class App extends Component {
   render() {
-    return ( <
-      div >
-      <
-      Navbar / >
-      <
-      Custom / >
-      <
-      /div>
+    return (
+      <div>
+        <Navbar / >
+        <Custom / >
+      </div>
     );
   }
 }

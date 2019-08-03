@@ -10,6 +10,7 @@ const Custom = () => {
             src="https://cdn4.iconfinder.com/data/icons/logos-3/600/React.js_logo-32.png"
             width="32"
           />
+          
         </span>
         + Parcel{" "}
         <span>

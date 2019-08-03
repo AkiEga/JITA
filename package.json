@@ -5,6 +5,7 @@
   "main": "src/electron.js",
   "scripts": {
     "react-start": "parcel -p 3000 index.html --out-dir build",
+    "watch": "parcel watch index.html",
     "react-build": "parcel build index.html --out-dir build --public-url ./",
     "electron-build": "electron-builder -mwl",
     "clean-build": "rm -rf build/ .cache dist/",
