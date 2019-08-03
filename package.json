@@ -48,7 +48,6 @@
       "category": "Development"
     }
   },
-  "homepage": "./",
   "devDependencies": {
     "babel-core": "6.26.3",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
