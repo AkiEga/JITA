@@ -16,6 +16,8 @@
 		"type": "npm",
 		"script": "watch",
 		"isBackground": true,
+		// this option is for AutoLaunch extension
+		// https://marketplace.visualstudio.com/items?itemName=philfontaine.autolaunch
 		"auto": true
 	}]
 }
