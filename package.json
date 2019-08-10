@@ -25,6 +25,7 @@
   "dependencies": {
     "electron-is-dev": "1.0.1",
     "react": "16.7.0",
+    "react-data-grid": "^6.1.0",
     "react-dom": "16.7.0",
     "semantic-ui-css": "2.4.1"
   },
