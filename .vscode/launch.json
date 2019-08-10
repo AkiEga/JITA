@@ -3,31 +3,37 @@
 	// 既存の属性の説明をホバーして表示します。
 	// 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
 	"version": "0.2.0",
-	"configurations": [{
-			"name": "Debug Main Process",
-			"type": "node",
-			"request": "launch",
-			"cwd": "${workspaceRoot}",
-			"runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
-			"windows": {
-				"runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+	"configurations": [
+				{
+				"name": "Debug run Main Process",
+				"type": "node",
+				"request": "launch",
+				"protocol": "inspector",				
+				"runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+				"windows": {
+					"runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+				},
+				"runtimeArgs": [
+					"--remote-debugging-port=9222",
+					"${workspaceRoot}/src/electron.js"
+				],
+				"cwd": "${workspaceRoot}"				
 			},
-			"program": "${workspaceRoot}/src/electron.js",
-			"protocol": "inspector"
-		},
 		{
-			"name": "Debug Renderer Process",
+			"name": "Attach Renderer Process",
 			"type": "chrome",
-			"request": "launch",
-			"runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
-			"windows": {
-				"runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
-			},
-			"runtimeArgs": [
-				"${workspaceRoot}/src/electron.js",
-				"--remote-debugging-port=9222"
-			],
+			"request": "attach",
+			"port": 9222,
 			"webRoot": "${workspaceRoot}/src"
+		}
+	],
+	"compounds": [
+		{
+			"name": "Electron: All",
+			"configurations": [
+				"Debug run Main Process",
+				"Attach Renderer Process"
+			]
 		}
 	]
 }
