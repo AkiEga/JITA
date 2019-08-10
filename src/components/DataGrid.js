@@ -16,6 +16,8 @@ const rows = [
 class DataGrid extends React.Component {  
   constructor (props) {
 	super(props)
+
+	// to bind current context(=this object)
     this.onGridRowsUpdated = this.onGridRowsUpdated.bind(this)
 
 	this.state = { rows };
