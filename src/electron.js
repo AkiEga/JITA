@@ -8,17 +8,19 @@ const isDev = require("electron-is-dev");
 
 let mainWindow;
 
+process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 900,
-    height: 680
+    height: 680,
+    webPreferences: {
+      nodeIntegration: true
+    }
   });
 
-  mainWindow.loadURL(
-    isDev
-      ? "http://localhost:3000"
-      : `file://${path.join(__dirname, "../build/index.html")}`
-  );
+  let index_file_absolutely_path =  `${path.join(__dirname, "../build/index.html")}`
+  mainWindow.loadURL(`file://${index_file_absolutely_path}`)
   mainWindow.on("closed", () => (mainWindow = null));
 }
 
