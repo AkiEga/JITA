@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDataGrid from 'react-data-grid'
-import { JiraCrawler } from '../background/crawler/jiraCrawler'
+import { JiraCrawler } from 'background/crawler/jiraCrawler'
 
 const columns = [{ key: 'id', name: 'ID', editable: true }, { key: 'title', name: 'Title', editable: true }, { key: 'complete', name: 'Complete', editable: true }]
 
@@ -15,15 +15,15 @@ class DataGrid extends React.Component {
 
     this.state = { rows }
     this.jiraCrawler = new JiraCrawler()
-  }
-
-  onGridRowsUpdated({ fromRow, toRow, updated }) {
     let jql = 'project = "TEST" AND assignee = currentUser() AND resolution = Unresolved ORDER BY priority DESC'
     this.jiraCrawler.search(jql).then((res, err) => {
       console.log(res)
       this.jiraSearchResults = res
       return this.jiraSearchResults
     })
+  }
+
+  onGridRowsUpdated({ fromRow, toRow, updated }) {
 
     this.setState(state => {
       const rows = state.rows.slice()

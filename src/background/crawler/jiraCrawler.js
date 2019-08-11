@@ -1,6 +1,8 @@
 import fs from 'fs'
 import crypto from 'crypto'
-import request from 'request'
+import request from 'request-promise'
+import https from 'https'
+import {Buffer} from 'buffer'
 
 export class JiraCrawler {
   constructor() {
@@ -10,22 +12,31 @@ export class JiraCrawler {
     this.algorithm = 'aes-256-ctr'
     this.passphrase = '7IeZlmfz'
     this.user_config = JSON.parse(fs.readFileSync('user.json', 'utf8'))
-    this.user_config.password_decrypted = this.decrypt(this.user_config.password)
+
+    this.auth = ""
+    if(this.user_config.api_token){
+      this.auth = new Buffer(this.user_config.email + ":" + this.user_config.api_token, "utf8").toString("base64")
+    }else{
+      this.user_config.password_decrypted = this.decrypt(this.user_config.password)
+      this.auth = new Buffer(this.user_config.username + ":" + this.user_config.password_decrypted, "utf8").toString("base64")
+    }
   }
   search(jql) {
     return new Promise((resolve, reject) => {
-      let queryUrl = this.user_config.baseUrl + '/rest/api/2/search?jql=' + jql
-      queryUrl = this.addIdPassToUrl(queryUrl)
-      request.get(queryUrl, (error, response, body) => {
-        if (!error && response.statusCode == 200) {
-          let data = JSON.parse(body)
-          console.log(data.issues)
-          resolve(data.issues)
-        } else {
-          console.log("There isn't any result")
-          console.log(error)
-        }
+      let options = {
+        method: 'GET',
+        uri: `https://${this.user_config.hostname}/rest/api/2/search?jql=${encodeURI(jql)}`,
+        "headers": {
+          "Content-Type": 'application/json',
+          "Authorization": `Basic ${this.auth}`
+        },
+        json: true
+      }
+
+      request(options).then((res)=>{
+        console.log(res)
       })
+      
     })
   }
 
@@ -68,7 +79,7 @@ export class JiraCrawler {
   updateSetting(user_config) {
     console.log(user_config)
 
-    this.user_config.baseUrl = user_config.baseUrl
+    this.user_config.hostname = user_config.hostname
     this.user_config.username = user_config.username
     this.user_config.password = this.encrypt(user_config.password_decrypted)
     this.user_config.auto_sync_time = user_config.auto_sync_time
@@ -97,7 +108,7 @@ export class JiraCrawler {
   }
 
   addIdPassToUrl(Url) {
-    let newUrl = encodeURI(Url.replace(/^https:\/\//, 'http://' + this.user_config.username + ':' + this.user_config.password_decrypted + '@'))
+    let newUrl = encodeURI(Url.replace(/^https:\/\//, 'https://' + this.user_config.username + ':' + this.user_config.password_decrypted + '@'))
     return newUrl
   }
 }

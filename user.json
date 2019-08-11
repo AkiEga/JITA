@@ -1,7 +1,9 @@
 {
-    "username": "akira.ega@gmail.com",
+    "username": "akira.ega",
     "password": "5EFMKv8TxAk=",
-    "baseUrl": "https://akiega1988.atlassian.net",
+    "email": "akira.ega@gmail.com",
+    "api_token": "yjORgJBVlCNcFse59MKG67D1",
+    "hostname": "akiega1988.atlassian.net",
     "auto_sync_time": "10",
     "downloadDir": "./download/"
 }

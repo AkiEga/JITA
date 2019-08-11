@@ -4,9 +4,10 @@
   "description": "Electron app build using ReactJS and Parcel web application bundler",
   "main": "src/electron.js",
   "scripts": {
+    "webpack-debug-build": "webpack --config webpack.config.js --mode development",
     "react-start": "parcel -p 3000 index.html --out-dir build",
     "watch": "parcel watch index.html",
-    "react-build": "parcel build index.html --out-dir build --public-url ./",
+    "react-build": "parcel build index.html --out-dir build --public-url ./ --no-minify",
     "electron-build": "electron-builder -mwl",
     "clean-build": "rm -rf build/ .cache dist/",
     "build": "yarn clean-build && yarn react-build && yarn electron-build",
@@ -23,12 +24,13 @@
   "author": "Yogesh Kumar <yogesh@boskysoft.com>",
   "license": "MIT",
   "dependencies": {
+    "components": "^0.1.0",
     "electron-is-dev": "1.0.1",
     "fs-promise": "^2.0.3",
     "react": "16.7.0",
     "react-data-grid": "^6.1.0",
     "react-dom": "16.7.0",
-    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
     "semantic-ui-css": "2.4.1"
   },
   "build": {
@@ -53,14 +55,21 @@
     }
   },
   "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.5.5",
     "babel-core": "6.26.3",
     "babel-eslint": "^10.0.2",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-module-resolver": "^3.2.0",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
     "babel-plugin-transform-react-jsx": "6.24.1",
     "babel-preset-env": "1.7.0",
     "babel-preset-react": "6.24.1",
     "concurrently": "4.1.0",
     "cross-env": "5.2.0",
+    "css-loader": "^3.2.0",
     "electron": "4.0.1",
     "electron-builder": "20.38.4",
     "eslint": "^6.1.0",
@@ -69,9 +78,16 @@
     "eslint-plugin-jest": "^22.15.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.14.3",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "html-webpack-plugin": "^3.2.0",
     "parcel-bundler": "1.12.3",
     "prettier-eslint": "^9.0.0",
     "prettier-eslint-cli": "^5.0.0",
-    "wait-on": "3.2.0"
+    "sass-loader": "^7.2.0",
+    "style-loader": "^1.0.0",
+    "url-loader": "^2.1.0",
+    "wait-on": "3.2.0",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6"
   }
 }
