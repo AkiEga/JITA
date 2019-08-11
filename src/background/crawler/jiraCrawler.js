@@ -23,18 +23,41 @@ export class JiraCrawler {
   }
   search(jql) {
     return new Promise((resolve, reject) => {
+      // var bodyData = `{
+      //   "expand": [
+      //     "names",
+      //     "schema",
+      //     "operations"
+      //   ],
+      //   "jql": ${jql},
+      //   "maxResults": 15,
+      //   "fieldsByKeys": false,
+      //   "fields": [
+      //     "summary",
+      //     "status",
+      //     "assignee"
+      //   ],
+      //   "startAt": 0
+      // }`;
+      let baseURI = `https://${this.user_config.hostname}`
+      let api_path = '/rest/api/2/search'
+      let expand_val =encodeURI("names,schema,operations")
+      let fields_val =encodeURI("*all")
+      let uri = `${baseURI}${api_path}?jql=${encodeURI(jql)}&expand=${expand_val}&fields=${fields_val}`
       let options = {
         method: 'GET',
-        uri: `https://${this.user_config.hostname}/rest/api/2/search?jql=${encodeURI(jql)}`,
+        uri: uri,
         "headers": {
           "Content-Type": 'application/json',
           "Authorization": `Basic ${this.auth}`
         },
-        json: true
+        json: true,
+        // body: bodyData
       }
 
       request(options).then((res)=>{
         console.log(res)
+        
         resolve(res)
       }).error(e=>{
         console.error("error: "+e)
@@ -114,5 +137,9 @@ export class JiraCrawler {
   addIdPassToUrl(Url) {
     let newUrl = encodeURI(Url.replace(/^https:\/\//, 'https://' + this.user_config.username + ':' + this.user_config.password_decrypted + '@'))
     return newUrl
+  }
+
+  genBrowserURL(key){
+    return `https://${this.user_config.hostname}/browse/${key}`
   }
 }

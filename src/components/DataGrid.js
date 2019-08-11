@@ -31,7 +31,7 @@ class DataGrid extends React.Component {
             key: i.key,
             summary: i.fields.summary,
             update: i.fields.updated,
-            url: i.self
+            url: this.jiraCrawler.genBrowserURL(i.key)
           }
           rows.push(new_issue)
         }
