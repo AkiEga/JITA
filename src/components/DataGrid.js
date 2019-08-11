@@ -2,9 +2,15 @@ import React from 'react'
 import ReactDataGrid from 'react-data-grid'
 import { JiraCrawler } from 'background/crawler/jiraCrawler'
 
-const columns = [{ key: 'id', name: 'ID', editable: true }, { key: 'title', name: 'Title', editable: true }, { key: 'complete', name: 'Complete', editable: true }]
+const columns = [
+  { key: 'key', name: 'key', editable: false }, 
+  { key: 'summary', name: 'Summary', editable: true },   
+  { key: 'update', name: 'update date', editable: false },
+  { key: 'url', name: 'url', editable: false, formatter: ({value})=>{return <a href={value}>{value}</a>}}
+]
 
-const rows = [{ id: 0, title: 'Task 1', complete: 20 }, { id: 1, title: 'Task 2', complete: 40 }, { id: 2, title: 'Task 3', complete: 60 }]
+// const rows = [{ id: 0, title: 'Task 1', complete: 20 }, { id: 1, title: 'Task 2', complete: 40 }, { id: 2, title: 'Task 3', complete: 60 }]
+let rows = []
 
 class DataGrid extends React.Component {
   constructor(props) {
@@ -19,7 +25,18 @@ class DataGrid extends React.Component {
     this.jiraCrawler.search(jql).then((res, err) => {
       console.log(res)
       this.jiraSearchResults = res
-      return this.jiraSearchResults
+      if(res.issues){
+        for(var i of res.issues){
+          let new_issue = {
+            key: i.key,
+            summary: i.fields.summary,
+            update: i.fields.updated,
+            url: i.self
+          }
+          rows.push(new_issue)
+        }
+        this.setState(rows)
+      }      
     })
   }
 

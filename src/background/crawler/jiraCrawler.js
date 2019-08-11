@@ -35,6 +35,10 @@ export class JiraCrawler {
 
       request(options).then((res)=>{
         console.log(res)
+        resolve(res)
+      }).error(e=>{
+        console.error("error: "+e)
+        reject(new Error(e))
       })
       
     })
