@@ -1,7 +1,6 @@
 import { BROWSER_ACTION } from "redux/actionTypes";
 
 const initialState = {
-	url: "https://www.google.com",
 	url_history: ["https://www.google.com"],
 	url_history_pos: 0,
 }
