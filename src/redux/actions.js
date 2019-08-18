@@ -1,4 +1,5 @@
 import { TICKET_ACTION }  from "./actionTypes";
+import { BROWSER_ACTION }  from "./actionTypes";
 
 let nextTodoId = 0;
 
@@ -13,3 +14,9 @@ export const toggleTodo = id => ({
   payload: {  }
 });
 
+export const moveTicketPage = url => ({
+  type: BROWSER_ACTION.NEW_PAGE,
+  payload: {
+    url: url
+  }
+})

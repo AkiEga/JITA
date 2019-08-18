@@ -1,25 +1,40 @@
 import React from 'react'
-import ReactDataGrid from 'react-data-grid'
+import { connect } from 'react-redux'
+
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import BootstrapTable from 'react-bootstrap-table-next';
+
 import { JiraCrawler } from 'background/crawler/jiraCrawler'
+import {moveTicketPage} from 'redux/actions'
+
+let tickets = []
 
 const columns = [
-  { key: 'key', name: 'key', editable: false }, 
-  { key: 'summary', name: 'Summary', editable: true },   
-  { key: 'update', name: 'update date', editable: false },
-  { key: 'url', name: 'url', editable: false, formatter: ({value})=>{return <a href={value}>{value}</a>}}
+  {
+    dataField: "key",
+    text: 'key'
+  },
+  {
+    dataField: "summary",
+    text: 'summary'
+  },
+  {
+    dataField: "update",
+    text: 'update'
+  }
 ]
+  // { key: 'url', name: 'url', editable: false, formatter: ({value})=>{return <button onClick={e => dispatchMoveTicketPage(value)}>{value}</button>}
 
-// const rows = [{ id: 0, title: 'Task 1', complete: 20 }, { id: 1, title: 'Task 2', complete: 40 }, { id: 2, title: 'Task 3', complete: 60 }]
-let rows = []
-
-class DataGrid extends React.Component {
+export class DataGrid extends React.Component {
   constructor(props) {
     super(props)
 
     // to bind current context(=this object)
-    this.onGridRowsUpdated = this.onGridRowsUpdated.bind(this)
+    this.onRowClickEvent = this.onRowClickEvent.bind(this)
+    
+    this.state = { tickets }
 
-    this.state = { rows }
+    // For JIRA
     this.jiraCrawler = new JiraCrawler()
     let jql = 'project = "TEST" AND assignee = currentUser() AND resolution = Unresolved ORDER BY priority DESC'
     this.jiraCrawler.search(jql).then((res, err) => {
@@ -33,27 +48,39 @@ class DataGrid extends React.Component {
             update: i.fields.updated,
             url: this.jiraCrawler.genBrowserURL(i.key)
           }
-          rows.push(new_issue)
+          tickets.push(new_issue)
         }
-        this.setState(rows)
+        this.setState(tickets)
       }      
     })
+    this.rowEvents = {
+      onClick: this.onRowClickEvent
+    }
   }
 
-  onGridRowsUpdated({ fromRow, toRow, updated }) {
+  // onGridRowsUpdated({ fromRow, toRow, updated }) {
 
-    this.setState(state => {
-      const rows = state.rows.slice()
-      for (let i = fromRow; i <= toRow; i++) {
-        rows[i] = { ...rows[i], ...updated }
-      }
-      return { rows }
-    })
+  //   this.setState(state => {
+  //     const ticket = state.tickets.slice()
+  //     for (let i = fromRow; i <= toRow; i++) {
+  //       tickets[i] = { ...tickets[i], ...updated }
+  //     }
+  //     return { rows }
+  //   })
+  // }
+  onRowClickEvent(e, row, rowIndex){
+    console.log(e)
+    console.log(row)
+    console.log(rowIndex)
   }
-
   render() {
-    return <ReactDataGrid columns={columns} rowGetter={i => this.state.rows[i]} rowsCount={3} onGridRowsUpdated={this.onGridRowsUpdated} enableCellSelect={true} />
+    let tickets = this.state.tickets
+    return <BootstrapTable keyField='id' data={ tickets } columns={ columns } rowEvents={this.rowEvents}/>
   }
 }
 
-export default DataGrid
+export default connect(
+	state => ({url: state.url}),
+	dispatch => ({dispatchMoveTicketPage: url => dispatch(moveTicketPage(url))})
+)(DataGrid)
+
