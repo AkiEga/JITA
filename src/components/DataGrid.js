@@ -69,9 +69,8 @@ export class DataGrid extends React.Component {
   //   })
   // }
   onRowClickEvent(e, row, rowIndex){
-    console.log(e)
-    console.log(row)
-    console.log(rowIndex)
+    let url = this.state.tickets[rowIndex].url;
+    this.props.dispatchMoveTicketPage(url);
   }
   render() {
     let tickets = this.state.tickets
@@ -79,8 +78,12 @@ export class DataGrid extends React.Component {
   }
 }
 
+const mapDispatchToProps = dispatch => ({
+  dispatchMoveTicketPage: url => dispatch(moveTicketPage(url))
+})
+
 export default connect(
-	state => ({url: state.url}),
-	dispatch => ({dispatchMoveTicketPage: url => dispatch(moveTicketPage(url))})
+	null,
+	mapDispatchToProps
 )(DataGrid)
 
