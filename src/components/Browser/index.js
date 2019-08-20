@@ -7,7 +7,12 @@ export class Browser extends React.Component {
   }
   render() {    
     let url = this.props.url
-    return <webview src={url} autosize="on"/>
+    return <webview 
+    src={url} 
+    autosize="on" 
+    style={{height: '-webkit-fill-available'}}>
+    </webview>
+    
   }
 }
 
