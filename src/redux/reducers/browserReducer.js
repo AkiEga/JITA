@@ -10,9 +10,10 @@ export default function(state = initialState, action) {
 	switch (action.type) {
 		case BROWSER_ACTION.NEW_PAGE: {		
 			let new_url = action.payload.url;
+			let new_url_history =[...state.url_history, new_url]
 			return { 
 				url: new_url,
-				url_history: state.url_history.push(new_url),
+				url_history: new_url_history,
 				url_history_pos: state.url_history_pos++
 			};
 		}
